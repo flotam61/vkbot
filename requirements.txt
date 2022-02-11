@@ -1,0 +1,5 @@
+random
+requests
+sqlalchemy
+vk_api
+vk_api.longpoll

@@ -1,10 +1,6 @@
-import sqlalchemy
-import psycopg2
-import requests
 from random import randrange
-import vk_api
-from vk_api.longpoll import VkLongPoll, VkEventType
-from search import search_users
+import requests
+from setting import *
 
 db = 'postgresql://flores:zxc@localhost:5432/bot'
 engine = sqlalchemy.create_engine(db)
@@ -78,36 +74,35 @@ for event in longpoll.listen():
                     write_msg(event.user_id, f'Информация о вас: {x}')
 
             elif request == "Поиск" or request == "поиск":
-                search_users()
-                # name_user_bd = connection.execute("""SELECT first_name FROM vkbot
-                #             WHERE id_vk = %s;""", (event.user_id)).fetchone()
-                # for name_user_bd_in in name_user_bd:
-                #     write_msg(event.user_id, f'Сейчас начнём поиск, {name_user_bd_in}')
-                #
-                # sex_user = connection.execute("""SELECT sex FROM vkbot
-                # WHERE id_vk = %s;""", (event.user_id)).fetchone()
-                # for sex_user_in in sex_user:
-                #     print()
-                #
-                # city_user = connection.execute("""SELECT city_name FROM vkbot
-                # WHERE id_vk = %s;""", (event.user_id)).fetchone()
-                # for city_user_in in city_user:
-                #     print()
-                #
-                # age_user = connection.execute("""SELECT age_user FROM vkbot
-                # WHERE id_vk = %s;""", (event.user_id)).fetchone()
-                # for age_user_in in age_user:
-                #     print()
-                #
-                # if sex_user_in == 2:
-                #     sex_user_vs = 1
-                # elif sex_user_in == 1:
-                #     sex_user_vs = 2
-                # url = "https://api.vk.com/method/users.search"
-                # params = {"hometown": city_user_in, "age_from": age_user_in - 2, "age_to": age_user_in + 2, "count": "5", "sex": sex_user_vs, "access_token": token_user, "v": "5.131"}
-                # newdata = requests.get(url, params=params).json()
-                # for q in newdata['response']['items']:
-                #     write_msg(event.user_id, f"{q['first_name']} {q['last_name']} - https://vk.com/id{q['id']}")
+                name_user_bd = connection.execute("""SELECT first_name FROM vkbot
+                            WHERE id_vk = %s;""", (event.user_id)).fetchone()
+                for name_user_bd_in in name_user_bd:
+                    write_msg(event.user_id, f'Сейчас начнём поиск, {name_user_bd_in}')
+
+                sex_user = connection.execute("""SELECT sex FROM vkbot
+                WHERE id_vk = %s;""", (event.user_id)).fetchone()
+                for sex_user_in in sex_user:
+                    print()
+
+                city_user = connection.execute("""SELECT city_name FROM vkbot
+                WHERE id_vk = %s;""", (event.user_id)).fetchone()
+                for city_user_in in city_user:
+                    print()
+
+                age_user = connection.execute("""SELECT age_user FROM vkbot
+                WHERE id_vk = %s;""", (event.user_id)).fetchone()
+                for age_user_in in age_user:
+                    print()
+
+                if sex_user_in == 2:
+                    sex_user_vs = 1
+                elif sex_user_in == 1:
+                    sex_user_vs = 2
+                url = "https://api.vk.com/method/users.search"
+                params = {"hometown": city_user_in, "age_from": age_user_in - 2, "age_to": age_user_in + 2, "count": "5", "sex": sex_user_vs, "access_token": token_user, "v": "5.131"}
+                newdata = requests.get(url, params=params).json()
+                for q in newdata['response']['items']:
+                    write_msg(event.user_id, f"{q['first_name']} {q['last_name']} - https://vk.com/id{q['id']}")
             else:
                 write_msg(event.user_id, f'Для регистрации напишите "Привет".\n Чтобы искать пару, напишите "Поиск".'
                                          f'\n Введите "Информация" чтобы проверить информацию о себе.')
